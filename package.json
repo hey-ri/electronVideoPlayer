@@ -2,21 +2,22 @@
   "name": "electronvideoplayer",
   "version": "0.0.0",
   "type": "module",
-  "main": "/main.js",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "electron": "wait-on tcp:3000 && cross-env IS_DEV=true electron .",
-    "electron:pack": "electron-builder --dir",
-    "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run electron\"",
-    "electron:build": "electron-builder --win --x64",
-    "build:for:electron": "cross-env ELECTRON=true npm run build",
+    "el": "wait-on tcp:8000 && cross-env IS_DEV=true electron .",
+    "el:pack": "electron-builder --dir",
+    "el:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run el\"",
+    "el:build": "electron-builder --win --x64",
+    "el:start": "electron .",
+    "build:for:el": "cross-env ELECTRON=true npm run build",
     "app:build": "npm run build:for:el && npm run el:build"
   },
   "dependencies": {
-    "electron": "^28.1.1",
-    "electron-builder": "^24.9.1",
+    "concurrently": "^8.2.2",
+    "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -26,10 +27,41 @@
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "@vitejs/plugin-react": "^4.0.0",
+    "cross-env": "^7.0.3",
+    "electron": "^28.1.1",
+    "electron-builder": "^24.9.1",
     "eslint": "^8.38.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
     "typescript": "^5.0.2",
-    "vite": "^4.3.2"
+    "vite": "^4.3.2",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.hey-ri.videoplayer",
+    "productName": "electronVideoplayer",
+    "copyright": "Copyright © 2023 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": [
+        "zip"
+      ],
+      "asar": false,
+      "icon": "public/appicon.icon"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist_electron"
+    }
   }
 }
