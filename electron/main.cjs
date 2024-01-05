@@ -16,6 +16,7 @@ function createWindow() {
     width: 1500,
     height: 1000,
     webPreferences: {
+      webSecurity: false,
       nodeIntegration: true,
       preload: path.join(__dirname, 'preload.cjs'),
     },
