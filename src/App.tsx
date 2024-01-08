@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import styled from 'styled-components';
 import { LuPanelLeftClose } from 'react-icons/lu';
@@ -18,7 +18,7 @@ const Wrapper = styled.div<{ $isShowPlayList: Boolean }>`
   height: 100vh;
   background-color: #34343e;
   display: grid;
-  grid-template-columns: ${(props) => (props.$isShowPlayList ? '80% auto' : 'auto 50px')};
+  grid-template-columns: ${(props) => (props.$isShowPlayList ? '70% auto' : 'auto 50px')};
 `;
 const VideoWrap = styled.div`
   width: 100%;
@@ -41,6 +41,9 @@ const PlayListWrapper = styled.div<{ $isShowPlayList: Boolean }>`
 
   padding: 10px;
 
+  input {
+    display: ${(props) => (props.$isShowPlayList ? 'block' : 'none')};
+  }
   > button {
     width: 30px;
     height: 30px;
@@ -51,13 +54,38 @@ const PlayListWrapper = styled.div<{ $isShowPlayList: Boolean }>`
 
 const PlayList = styled.div<{ $isShowPlayList: Boolean }>`
   display: ${(props) => (props.$isShowPlayList ? 'grid' : 'none')};
-  gap: 20px;
+  grid-template-rows: repeat(auto, 1fr);
+  gap: 15px;
 `;
+
+const PlayListVideo = styled.div`
+  display: grid;
+  grid-template-columns: 150px auto;
+  gap: 10px;
+  font-size: 14px;
+  color: #e4e4e4;
+  img {
+    width: 100%;
+  }
+`;
+
+interface PlayListData {
+  videoFilePath: string;
+  filename: string;
+  imgData: string | null; // 이미지 데이터는 문자열 또는 null일 수 있도록 정의
+}
 
 function App() {
   const [isShowPlayList, setIsShowPlayList] = useState<Boolean>(false);
-  const [videoName, setVideoName] = useState<string>('');
+  const [videoFilePath, setVideoFilePath] = useState<string>('');
   const [thumbnail, setThumbnail] = useState<string>('');
+  const [filename, setFilename] = useState<string>('');
+  const [playList, setPlayList] = useState<PlayListData[]>([{ videoFilePath: '', filename: '', imgData: '' }]);
+
+  useEffect(() => {
+    const playListResData: object = { videoFilePath: videoFilePath, filename: filename, imgData: thumbnail };
+    setPlayList((prevItems: any) => [...prevItems, playListResData]);
+  }, [thumbnail]);
 
   const onShowPL = () => {
     setIsShowPlayList((s) => (s = !s));
@@ -65,14 +93,13 @@ function App() {
 
   const addVideoPL = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files == null) return;
+    handleFileUpload(e);
 
     const videoFileInfo = e.target.files[0];
     const videoFilePath = URL.createObjectURL(videoFileInfo);
-    console.log(videoFileInfo);
-    setVideoName(videoFilePath);
-    console.log({ videoName });
 
-    handleFileUpload(e);
+    setVideoFilePath(videoFilePath);
+    setFilename(videoFileInfo.name);
   };
 
   const generateVideoThumbnail = (file: File) => {
@@ -110,15 +137,20 @@ function App() {
 
       <Wrapper $isShowPlayList={isShowPlayList}>
         <VideoWrap>
-          <VideoPlayer src={videoName} autoPlay controls muted />
+          <VideoPlayer src={videoFilePath} autoPlay controls muted />
         </VideoWrap>
         <PlayListWrapper $isShowPlayList={isShowPlayList}>
           <button>
             <LuPanelLeftClose style={{ strokeWidth: '1.5', color: '#e4e4e4', fontSize: 24 }} onClick={onShowPL} />
           </button>
+          <input type="file" onChange={addVideoPL} />
           <PlayList $isShowPlayList={isShowPlayList}>
-            <input type="file" onChange={addVideoPL} />
-            <img src={thumbnail} alt="" />
+            {playList.map((pl: any, idx: number) => (
+              <PlayListVideo key={idx}>
+                <img src={pl.imgData} alt="" />
+                <p>{pl.filename}</p>
+              </PlayListVideo>
+            ))}
           </PlayList>
         </PlayListWrapper>
       </Wrapper>
