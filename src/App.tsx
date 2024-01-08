@@ -5,7 +5,7 @@ import { LuPanelLeftClose } from 'react-icons/lu';
 
 const Title = styled.h1`
   font-size: 16px;
-  width: 100%;
+  /* width: 100%; */
   height: 30px;
   line-height: 30px;
   background-color: #0a0a12;
@@ -53,13 +53,12 @@ const PlayListWrapper = styled.div<{ $isShowPlayList: Boolean }>`
   }
 `;
 
-const PlayList = styled.div<{ $isShowPlayList: Boolean }>`
+const PlayList = styled.div<{ $isShowPlayList: Boolean; thumbnail: String }>`
   display: ${(props) => (props.$isShowPlayList ? 'grid' : 'none')};
   grid-template-rows: repeat(auto, 1fr);
   gap: 15px;
-  height: 100%;
-  overflow-y: scroll;
-  background-color: yellow;
+  height: calc(100vh - 104px);
+  overflow: ${(props) => (props.thumbnail ? 'scroll' : 'auto')};
 `;
 
 const PlayListVideo = styled.div`
@@ -145,7 +144,7 @@ function App() {
             <LuPanelLeftClose style={{ strokeWidth: '1.5', color: '#e4e4e4', fontSize: 24 }} onClick={onShowPL} />
           </button>
           <input type="file" onChange={addVideoPL} />
-          <PlayList $isShowPlayList={isShowPlayList}>
+          <PlayList $isShowPlayList={isShowPlayList} $thumbnail={thumbnail}>
             {playList.map((pl: any, idx: number) => (
               <PlayListVideo key={idx}>
                 <img src={pl.imgData} alt="" />
