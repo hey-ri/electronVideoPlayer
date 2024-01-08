@@ -22,7 +22,7 @@ const Wrapper = styled.div<{ $isShowPlayList: Boolean }>`
 `;
 const VideoWrap = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 10px);
   display: flex;
   align-items: center;
 `;
@@ -53,12 +53,12 @@ const PlayListWrapper = styled.div<{ $isShowPlayList: Boolean }>`
   }
 `;
 
-const PlayList = styled.div<{ $isShowPlayList: Boolean; thumbnail: String }>`
+const PlayList = styled.div<{ $isShowPlayList: Boolean; $thumbnail: String }>`
   display: ${(props) => (props.$isShowPlayList ? 'grid' : 'none')};
   grid-template-rows: repeat(auto, 1fr);
   gap: 15px;
   height: calc(100vh - 104px);
-  overflow: ${(props) => (props.thumbnail ? 'scroll' : 'auto')};
+  overflow-y: ${(props) => (props.$thumbnail ? 'scroll' : 'auto')};
 `;
 
 const PlayListVideo = styled.div`
