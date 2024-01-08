@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import styled from 'styled-components';
+import { LuPanelLeftClose } from 'react-icons/lu';
 
 const Title = styled.h1`
   font-size: 16px;
@@ -17,7 +18,7 @@ const Wrapper = styled.div<{ $isShowPlayList: Boolean }>`
   height: 100vh;
   background-color: #34343e;
   display: grid;
-  grid-template-columns: ${(props) => (props.$isShowPlayList ? '80% auto' : 'auto 60px')};
+  grid-template-columns: ${(props) => (props.$isShowPlayList ? '80% auto' : 'auto 50px')};
 `;
 const VideoWrap = styled.div`
   width: 100%;
@@ -28,10 +29,29 @@ const VideoPlayer = styled.video`
   object-fit: contain;
   width: 100%;
 `;
-const PlayList = styled.div`
+const PlayListWrapper = styled.div<{ $isShowPlayList: Boolean }>`
   background-color: #1c1c22;
-  width: 100%;
+  /* background-color: #636363; */
+  /* min-width: 50px; */
   height: 100%;
+  display: flex;
+  align-items: ${(props) => (props.$isShowPlayList ? 'flex-start' : 'center')};
+  flex-direction: column;
+  gap: 5px;
+
+  padding: 10px;
+
+  > button {
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border: 0;
+  }
+`;
+
+const PlayList = styled.div<{ $isShowPlayList: Boolean }>`
+  display: ${(props) => (props.$isShowPlayList ? 'grid' : 'none')};
+  gap: 20px;
 `;
 
 function App() {
@@ -92,10 +112,15 @@ function App() {
         <VideoWrap>
           <VideoPlayer src={videoName} autoPlay controls muted />
         </VideoWrap>
-        <PlayList onClick={onShowPL}>
-          <input type="file" onChange={addVideoPL} />
-          <img src={thumbnail} alt="" />
-        </PlayList>
+        <PlayListWrapper $isShowPlayList={isShowPlayList}>
+          <button>
+            <LuPanelLeftClose style={{ strokeWidth: '1.5', color: '#e4e4e4', fontSize: 24 }} onClick={onShowPL} />
+          </button>
+          <PlayList $isShowPlayList={isShowPlayList}>
+            <input type="file" onChange={addVideoPL} />
+            <img src={thumbnail} alt="" />
+          </PlayList>
+        </PlayListWrapper>
       </Wrapper>
     </>
   );
