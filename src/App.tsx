@@ -15,13 +15,14 @@ const Title = styled.h1`
 
 const Wrapper = styled.div<{ $isShowPlayList: Boolean }>`
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 30px);
   background-color: #34343e;
   display: grid;
   grid-template-columns: ${(props) => (props.$isShowPlayList ? '70% auto' : 'auto 50px')};
 `;
 const VideoWrap = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
 `;
@@ -33,7 +34,7 @@ const PlayListWrapper = styled.div<{ $isShowPlayList: Boolean }>`
   background-color: #1c1c22;
   /* background-color: #636363; */
   /* min-width: 50px; */
-  height: 100%;
+  height: calc(100% - 30px);
   display: flex;
   align-items: ${(props) => (props.$isShowPlayList ? 'flex-start' : 'center')};
   flex-direction: column;
@@ -56,6 +57,9 @@ const PlayList = styled.div<{ $isShowPlayList: Boolean }>`
   display: ${(props) => (props.$isShowPlayList ? 'grid' : 'none')};
   grid-template-rows: repeat(auto, 1fr);
   gap: 15px;
+  height: 100%;
+  overflow-y: scroll;
+  background-color: yellow;
 `;
 
 const PlayListVideo = styled.div`
