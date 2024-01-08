@@ -73,23 +73,20 @@ const PlayListVideo = styled.div`
   }
 `;
 
-interface PlayListData {
-  videoFilePath: string;
-  filename: string;
-  imgData: string | null; // 이미지 데이터는 문자열 또는 null일 수 있도록 정의
-}
-
 function App() {
   const [isShowPlayList, setIsShowPlayList] = useState<Boolean>(false);
   const [videoFilePath, setVideoFilePath] = useState<string>('');
   const [thumbnail, setThumbnail] = useState<string>('');
   const [filename, setFilename] = useState<string>('');
-  const [playList, setPlayList] = useState<PlayListData[]>([{ videoFilePath: '', filename: '', imgData: '' }]);
+  const [playList, setPlayList] = useState<Array<object>>([]);
 
   useEffect(() => {
+    if (thumbnail == '') return;
     const playListResData: object = { videoFilePath: videoFilePath, filename: filename, imgData: thumbnail };
     setPlayList((prevItems: any) => [...prevItems, playListResData]);
-  }, [thumbnail]);
+
+    console.log(playList);
+  }, [thumbnail, filename, videoFilePath]);
 
   const onShowPL = () => {
     setIsShowPlayList((s) => (s = !s));
