@@ -56,8 +56,8 @@ const PlayListWrapper = styled.div<{ $isShowPlayList: Boolean }>`
 `;
 
 const PlayList = styled.div<{ $isShowPlayList: Boolean; $thumbnail: String }>`
-  display: ${(props) => (props.$isShowPlayList ? 'grid' : 'none')};
-  grid-template-rows: repeat(auto, 1fr);
+  display: ${(props) => (props.$isShowPlayList ? 'flex' : 'none')};
+  flex-direction: column;
   gap: 15px;
   width: 100%;
   height: calc(100vh - 104px);
