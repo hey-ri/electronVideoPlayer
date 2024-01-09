@@ -78,12 +78,18 @@ const PlayListVideo = styled.div`
   }
 `;
 
+interface PlaylistItem {
+  videoFilePath: string;
+  filename: string;
+  imgData: string;
+}
+
 function App() {
   const [isShowPlayList, setIsShowPlayList] = useState<Boolean>(false);
   const [videoFilePath, setVideoFilePath] = useState<string>('');
   const [thumbnail, setThumbnail] = useState<string>('');
   const [filename, setFilename] = useState<string>('');
-  const [playList, setPlayList] = useState<Array<object>>([]);
+  const [playList, setPlayList] = useState<PlaylistItem[]>([]);
 
   useEffect(() => {
     if (thumbnail == '') return;
@@ -135,7 +141,7 @@ function App() {
     if (e.target.files == null) return;
     const thumbnail = await generateVideoThumbnail(e.target.files[0]);
 
-    setThumbnail(thumbnail as string);
+    if (playList.map((d) => d.filename.includes(filename))) setThumbnail(thumbnail as string);
   };
   return (
     <>
