@@ -85,7 +85,7 @@ interface PlaylistItem {
 }
 
 function App() {
-  const [isShowPlayList, setIsShowPlayList] = useState<Boolean>(false);
+  const [isShowPlayList, setIsShowPlayList] = useState<Boolean>(true);
   const [videoFilePath, setVideoFilePath] = useState<string>('');
   const [thumbnail, setThumbnail] = useState<string>('');
   const [filename, setFilename] = useState<string>('');
@@ -94,9 +94,7 @@ function App() {
   useEffect(() => {
     if (thumbnail == '') return;
     const playListResData: object = { videoFilePath: videoFilePath, filename: filename, imgData: thumbnail };
-    setPlayList((prevItems: any) => [...prevItems, playListResData]);
-
-    console.log(playList);
+    setPlayList((prevItems: any[]) => [...prevItems, playListResData]);
   }, [thumbnail]);
 
   const onShowPL = () => {
@@ -139,9 +137,16 @@ function App() {
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files == null) return;
-    const thumbnail = await generateVideoThumbnail(e.target.files[0]);
 
-    if (playList.map((d) => d.filename.includes(filename))) setThumbnail(thumbnail as string);
+    const thumbnail = await generateVideoThumbnail(e.target.files[0]);
+    setThumbnail(thumbnail as string);
+
+    //지금 선택한 파일 이름
+    const filenameToCheck = e.target.files[0].name;
+
+    if (playList.some((item) => item.filename === filenameToCheck)) {
+      setThumbnail(''); // 이미 플레이리스트에 있는 파일은 썸네일을 리셋
+    }
   };
   return (
     <>
