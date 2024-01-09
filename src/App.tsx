@@ -93,12 +93,12 @@ const PlayListVideo = styled.div<{ $isMyVideo: Boolean | string }>`
   box-sizing: border-box;
   padding: 10px 15px;
   cursor: pointer;
-  &:first-child {
+  /* &:first-child {
     padding: 20px 15px 10px 15px;
   }
   &:last-child {
     padding: 10px 15px 20px 15px;
-  }
+  } */
   img {
     width: 100%;
   }
