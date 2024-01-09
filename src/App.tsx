@@ -61,9 +61,7 @@ const PlayList = styled.div<{ $isShowPlayList: Boolean; $thumbnail: String }>`
   width: 100%;
   height: calc(100vh - 104px);
   background-color: #34343e;
-  overflow-y: ${(props) => (props.$thumbnail ? 'scroll' : 'auto')};
-  padding: 15px 0;
-  box-sizing: border-box;
+  overflow-y: scroll;
 `;
 
 const PlayListVideo = styled.div<{ $isMyVideo: Boolean }>`
