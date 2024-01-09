@@ -91,7 +91,7 @@ function App() {
     setPlayList((prevItems: any) => [...prevItems, playListResData]);
 
     console.log(playList);
-  }, [thumbnail, filename, videoFilePath]);
+  }, [thumbnail]);
 
   const onShowPL = () => {
     setIsShowPlayList((s) => (s = !s));
