@@ -64,7 +64,7 @@ const PlayList = styled.div<{ $isShowPlayList: Boolean; $thumbnail: String }>`
   overflow-y: scroll;
 `;
 
-const PlayListVideo = styled.div<{ $isMyVideo: Boolean }>`
+const PlayListVideo = styled.div<{ $isMyVideo: Boolean | string }>`
   display: grid;
   grid-template-columns: 150px auto;
   gap: 10px;
@@ -73,6 +73,7 @@ const PlayListVideo = styled.div<{ $isMyVideo: Boolean }>`
   background-color: ${(props) => (props.$isMyVideo ? '#0a0a12' : 'transparent')};
   box-sizing: border-box;
   padding: 10px 15px;
+  cursor: pointer;
   &:first-child {
     padding: 20px 15px 10px 15px;
   }
@@ -96,11 +97,14 @@ function App() {
   const [thumbnail, setThumbnail] = useState<string>('');
   const [filename, setFilename] = useState<string>('');
   const [playList, setPlayList] = useState<PlaylistItem[]>([]);
+  const [isMyvideo, setIsMyvideo] = useState<string>('');
 
   useEffect(() => {
     if (thumbnail == '') return;
     const playListResData: object = { videoFilePath: videoFilePath, filename: filename, imgData: thumbnail };
     setPlayList((prevItems: any[]) => [...prevItems, playListResData]);
+
+    console.log({ playList });
   }, [thumbnail]);
 
   const onShowPL = () => {
@@ -116,6 +120,7 @@ function App() {
 
     setVideoFilePath(videoFilePath);
     setFilename(videoFileInfo.name);
+    setIsMyvideo(videoFileInfo.name);
   };
 
   const generateVideoThumbnail = (file: File) => {
@@ -154,6 +159,12 @@ function App() {
       setThumbnail(''); // 이미 플레이리스트에 있는 파일은 썸네일을 리셋
     }
   };
+
+  const changeThisVideo = (idx: number) => {
+    setVideoFilePath(playList[idx].videoFilePath);
+    console.log({ filename });
+    setIsMyvideo(playList[idx].filename);
+  };
   return (
     <>
       <Title>Electron Video Player</Title>
@@ -169,7 +180,7 @@ function App() {
           <input type="file" onChange={addVideoPL} />
           <PlayList $isShowPlayList={isShowPlayList} $thumbnail={thumbnail}>
             {playList.map((pl: any, idx: number) => (
-              <PlayListVideo key={idx} $isMyVideo={playList[idx].filename == filename}>
+              <PlayListVideo key={idx} $isMyVideo={playList[idx].filename == isMyvideo} onClick={() => changeThisVideo(idx)}>
                 <img src={pl.imgData} alt="" />
                 <p>{pl.filename}</p>
               </PlayListVideo>
