@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import styled from 'styled-components';
-import { LuPanelLeftClose } from 'react-icons/lu';
+import { LuPanelRightOpen, LuPanelRightClose } from 'react-icons/lu';
 
 const Title = styled.h1`
   font-size: 16px;
@@ -23,7 +23,7 @@ const Wrapper = styled.div<{ $isShowPlayList: Boolean }>`
 `;
 const VideoWrap = styled.div`
   width: 100%;
-  height: calc(100% - 10px);
+  height: calc(100% - 20px);
   display: flex;
   align-items: center;
 `;
@@ -35,9 +35,9 @@ const PlayListWrapper = styled.div<{ $isShowPlayList: Boolean }>`
   background-color: #1c1c22;
   /* background-color: #636363; */
   /* min-width: 50px; */
-  height: calc(100% - 10px);
+  height: calc(100% - 20px);
   display: flex;
-  align-items: ${(props) => (props.$isShowPlayList ? 'flex-start' : 'center')};
+  /* align-items: ${(props) => (props.$isShowPlayList ? 'flex-end' : 'center')}; */
   flex-direction: column;
   gap: 5px;
 
@@ -45,10 +45,29 @@ const PlayListWrapper = styled.div<{ $isShowPlayList: Boolean }>`
   box-sizing: border-box;
 
   input {
-    display: ${(props) => (props.$isShowPlayList ? 'block' : 'none')};
+    display: none;
+  }
+  .btn-upload {
+    width: 90px;
+    height: 27px;
+    background: #34343e;
+    border: 1px solid #34343e;
+    color: #e4e4e4;
+    border-radius: 5px;
+    cursor: pointer;
+    display: ${(props) => (props.$isShowPlayList ? 'flex' : 'none')};
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, color 0.3s;
+    &:hover {
+      background: #636363;
+      color: #e4e4e4;
+    }
   }
   > button {
-    width: 30px;
+    display: block;
+    width: 100%;
+    text-align: end;
     height: 30px;
     background-color: transparent;
     border: 0;
@@ -175,9 +194,18 @@ function App() {
         </VideoWrap>
         <PlayListWrapper $isShowPlayList={isShowPlayList}>
           <button>
-            <LuPanelLeftClose style={{ strokeWidth: '1.5', color: '#e4e4e4', fontSize: 24 }} onClick={onShowPL} />
+            {isShowPlayList ? (
+              <LuPanelRightClose style={{ strokeWidth: '1.5', color: '#e4e4e4', fontSize: 24 }} onClick={onShowPL} />
+            ) : (
+              <LuPanelRightOpen style={{ strokeWidth: '1.5', color: '#e4e4e4', fontSize: 24 }} onClick={onShowPL} />
+            )}
           </button>
-          <input type="file" onChange={addVideoPL} />
+
+          <label htmlFor="file" className="btn-upload">
+            파일 찾기
+          </label>
+          <input type="file" id="file" className="form-control" onChange={addVideoPL} />
+
           <PlayList $isShowPlayList={isShowPlayList} $thumbnail={thumbnail}>
             {playList.map((pl: any, idx: number) => (
               <PlayListVideo key={idx} $isMyVideo={playList[idx].filename == isMyvideo} onClick={() => changeThisVideo(idx)}>
