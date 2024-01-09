@@ -58,7 +58,6 @@ const PlayListWrapper = styled.div<{ $isShowPlayList: Boolean }>`
 const PlayList = styled.div<{ $isShowPlayList: Boolean; $thumbnail: String }>`
   display: ${(props) => (props.$isShowPlayList ? 'flex' : 'none')};
   flex-direction: column;
-  gap: 15px;
   width: 100%;
   height: calc(100vh - 104px);
   background-color: #34343e;
@@ -67,12 +66,21 @@ const PlayList = styled.div<{ $isShowPlayList: Boolean; $thumbnail: String }>`
   box-sizing: border-box;
 `;
 
-const PlayListVideo = styled.div`
+const PlayListVideo = styled.div<{ $isMyVideo: Boolean }>`
   display: grid;
   grid-template-columns: 150px auto;
   gap: 10px;
   font-size: 14px;
   color: #e4e4e4;
+  background-color: ${(props) => (props.$isMyVideo ? '#0a0a12' : 'transparent')};
+  box-sizing: border-box;
+  padding: 10px 15px;
+  &:first-child {
+    padding: 20px 15px 10px 15px;
+  }
+  &:last-child {
+    padding: 10px 15px 20px 15px;
+  }
   img {
     width: 100%;
   }
@@ -163,7 +171,7 @@ function App() {
           <input type="file" onChange={addVideoPL} />
           <PlayList $isShowPlayList={isShowPlayList} $thumbnail={thumbnail}>
             {playList.map((pl: any, idx: number) => (
-              <PlayListVideo key={idx}>
+              <PlayListVideo key={idx} $isMyVideo={playList[idx].filename == filename}>
                 <img src={pl.imgData} alt="" />
                 <p>{pl.filename}</p>
               </PlayListVideo>
